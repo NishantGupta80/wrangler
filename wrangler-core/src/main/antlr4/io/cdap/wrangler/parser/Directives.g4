@@ -140,7 +140,12 @@ numberRange
  ;
 
 value
- : String | Number | Column | Bool
+ : String
+ | Number 
+ | Column 
+ | Bool
+ | BYTE_SIZE      // Added BYTE_SIZE as a valid value
+ | TIME_DURATION  // Added TIME_DURATION as a valid value
  ;
 
 ecommand
@@ -246,6 +251,22 @@ Pipe     : '|';
 BackSlash: '\\';
 Dollar   : '$';
 Tilde    : '~';
+
+/*
+ * New Lexer Rules for BYTE_SIZE and TIME_DURATION
+*/
+
+ // BYTE_SIZE token to match values like "10KB", "1.5MB", etc.
+BYTE_SIZE: DIGIT+ ('.' DIGIT+)? BYTE_UNIT;
+
+// TIME_DURATION token to match values like "150ms", "2.5s", etc.
+TIME_DURATION: DIGIT+ ('.' DIGIT+)? TIME_UNIT;
+
+// Helper fragments for BYTE_SIZE units
+fragment BYTE_UNIT: 'B' | 'KB' | 'MB' | 'GB' | 'TB';
+
+// Helper fragments for TIME_DURATION units
+fragment TIME_UNIT: 'ms' | 's' | 'm' | 'h' | 'd';
 
 
 Bool

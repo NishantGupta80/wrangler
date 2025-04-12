@@ -215,4 +215,31 @@ public class RecipeCompilerTest {
     Set<String> loadableDirectives = compile.getSymbols().getLoadableDirectives();
     Assert.assertEquals(4, loadableDirectives.size());
   }
+  @Test
+  public void testByteSizeTokenParsing() {
+    RecipeCompiler compiler = new RecipeCompiler();
+    Token token = compiler.visitByteSizeArg(new DirectivesParser.ByteSizeContext(null, 0));
+    Assert.assertTrue(token instanceof ByteSize);
+    Assert.assertEquals(10240L, ((ByteSize) token).getBytes());
+  }
+
+  @Test
+  public void testTimeDurationTokenParsing() {
+    RecipeCompiler compiler = new RecipeCompiler();
+    Token token = compiler.visitTimeDurationArg(new DirectivesParser.TimeDurationContext(null, 0));
+    Assert.assertTrue(token instanceof TimeDuration);
+    Assert.assertEquals(150L, ((TimeDuration) token).getMilliseconds());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidByteSizeToken() {
+    RecipeCompiler compiler = new RecipeCompiler();
+    compiler.visitByteSizeArg(new DirectivesParser.ByteSizeContext(null, 0));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidTimeDurationToken() {
+    RecipeCompiler compiler = new RecipeCompiler();
+    compiler.visitTimeDurationArg(new DirectivesParser.TimeDurationContext(null, 0));
+  }
 }

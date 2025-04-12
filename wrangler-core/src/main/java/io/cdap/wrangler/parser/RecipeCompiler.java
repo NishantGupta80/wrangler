@@ -20,6 +20,9 @@ import io.cdap.wrangler.api.CompileException;
 import io.cdap.wrangler.api.CompileStatus;
 import io.cdap.wrangler.api.Compiler;
 import io.cdap.wrangler.api.RecipeSymbol;
+import io.cdap.wrangler.api.parser.ByteSize;
+import io.cdap.wrangler.api.parser.TimeDuration;
+import io.cdap.wrangler.api.parser.Token;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -40,6 +43,27 @@ public final class RecipeCompiler implements Compiler {
     return compile(CharStreams.fromString(recipe));
   }
 
+  /**
+   * Visit method for BYTE_SIZE token.
+   *
+   * @param ctx The context of the BYTE_SIZE token.
+   * @return A ByteSize token instance.
+   */
+  public Token visitByteSizeArg(DirectivesParser.ByteSizeContext ctx) {
+    return new ByteSize(ctx.getText());
+  }
+
+  /**
+   * Visit method for TIME_DURATION token.
+   *
+   * @param ctx The context of the TIME_DURATION token.
+   * @return A TimeDuration token instance.
+   */
+  public Token visitTimeDurationArg(DirectivesParser.TimeDurationContext ctx) {
+    return new TimeDuration(ctx.getText());
+  }
+
+
   @Override
   public CompileStatus compile(Location location) throws CompileException {
     try (InputStream is = location.getInputStream()) {
@@ -57,6 +81,8 @@ public final class RecipeCompiler implements Compiler {
       throw new CompileException(e.getMessage(), e);
     }
   }
+
+  
 
   private CompileStatus compile(CharStream stream) throws CompileException {
     try {
