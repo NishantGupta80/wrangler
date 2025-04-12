@@ -176,6 +176,50 @@ rates below are specified as *records/second*.
 | High (167 Directives) |      426      | 511,785,592 | 330,711,381,296 | 105,768.93 |
 
 
+# Wrangler
+
+Wrangler is a data preparation tool that allows users to clean, transform, and enrich data for analytics and machine learning.
+
+---
+
+## **New Features**
+
+### **1. BYTE_SIZE and TIME_DURATION Parsers**
+
+#### **BYTE_SIZE Parser**
+- Parses byte size values (e.g., `10KB`, `1.5MB`, `2GB`) and converts them to bytes.
+- **Usage**:
+  - Use `BYTE_SIZE` in recipes or directives to handle byte size values.
+  - Example:
+    ```plaintext
+    10KB -> 10240 bytes
+    1.5MB -> 1572864 bytes
+    ```
+
+#### **TIME_DURATION Parser**
+- Parses time duration values (e.g., `150ms`, `2.5s`, `1h`) and converts them to milliseconds.
+- **Usage**:
+  - Use `TIME_DURATION` in recipes or directives to handle time duration values.
+  - Example:
+    ```plaintext
+    150ms -> 150 milliseconds
+    2.5s -> 2500 milliseconds
+    1h -> 3600000 milliseconds
+    ```
+
+---
+
+### **2. AggregateStats Directive**
+
+#### **Description**
+The `AggregateStats` directive aggregates byte sizes and time durations from source columns and stores the results in target columns. It supports optional unit conversions (e.g., bytes to MB, milliseconds to seconds).
+
+#### **Usage**
+- **Syntax**:
+  ```plaintext
+  aggregate-stats :<byte_size_column> :<time_duration_column> <total_size_column> <total_time_column> [--outputSizeUnit <unit>] [--outputTimeUnit <unit>]
+
+
 ## Contact
 
 ### Mailing Lists
